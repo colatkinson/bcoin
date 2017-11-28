@@ -2,7 +2,6 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const str = JSON.stringify;
 const env = process.env;
 
@@ -29,10 +28,16 @@ module.exports = {
     __filename: false
   },
   module: {
-    rules: [{
-      test: /\.node$/,
-      loader: 'node-loader'
-    }]
+    rules: [
+      {
+        test: /\.node$/,
+        loader: 'node-loader'
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader'
+      }
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -40,7 +45,7 @@ module.exports = {
         str(env.BCOIN_WORKER_FILE || 'bcoin-worker.js')
     }),
     new webpack.IgnorePlugin(/^utf-8-validate|bufferutil$/),
-    new UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: true
       }

@@ -2,7 +2,6 @@
 
 const webpack = require('webpack');
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const str = JSON.stringify;
 const env = process.env;
 
@@ -21,11 +20,13 @@ module.exports = {
     extensions: ['-browser.js', '.js', '.json']
   },
   module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /node_modules\/(?!bcoin|elliptic|bn\.js|n64)/,
-      loader: 'babel-loader'
-    }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules\/(?!bcoin|elliptic|bn\.js|n64)/,
+        loader: 'babel-loader'
+      }
+    ]
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -34,9 +35,9 @@ module.exports = {
       'process.env.BCOIN_WORKER_FILE':
         str(env.BCOIN_WORKER_FILE || '/bcoin-worker.js')
     }),
-    new UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: true
       }
     })
   ]
